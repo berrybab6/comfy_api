@@ -1,0 +1,5 @@
+Django==4.0.3
+Djangorestframework==3.13.1
+Pillow==9.0.1
+psycopg2==2.9.3
+djangorestframework-filters==0.11.1
