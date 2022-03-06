@@ -86,7 +86,7 @@ WSGI_APPLICATION = 'comfy_api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'Comfy',
+        'NAME': 'comfy',
         'USER': 'postgres',
         'PASSWORD': 'new_password',
         'HOST': '127.0.0.1',
