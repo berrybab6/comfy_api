@@ -11,6 +11,7 @@ router.register('color_size',views.ItemSizeListView)
 router.register('color',views.ColorListView)
 router.register('item_size',views.SizeListView)
 
+# router.register('prod_item_size',views.ProductSizeColorListView)
 
 
 urlpatterns = [

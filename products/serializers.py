@@ -18,3 +18,7 @@ class ColorSizeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ItemSizeColor
         fields = "__all__"
+# class ProductColorSizeSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = ProductSizeColor
+#         fields = "__all__"
