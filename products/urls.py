@@ -8,13 +8,11 @@ app_name = 'products'
 router = routers.DefaultRouter()
 router.register('product_list',views.ProductListView)
 router.register('color_size',views.ItemSizeListView)
-router.register('color',views.ColorListView)
-router.register('item_size',views.SizeListView)
-
-# router.register('prod_item_size',views.ProductSizeColorListView)
 
 
 urlpatterns = [
-    path('',include(router.urls))
+    path('',include(router.urls)),
+    path("product_detail/<int:pk>", views.ProductsDetailView.as_view(), name="User by role"),
+
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

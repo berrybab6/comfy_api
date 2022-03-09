@@ -32,25 +32,6 @@ class Products(models.Model):
 
 
 
-class Color(models.Model):
-    color = models.CharField(max_length=128)
-
-class ItemSize(models.Model):
-    XL = 1
-    XXL = 2
-    S = 3
-    L = 4
-
-    Size_CHOICES = ((XL, 'XL'), (XXL, 'XXL'), (S, 'S'),(L,'L'))
-    ##dont Forget 
-    size_category = models.PositiveSmallIntegerField(
-        choices=Size_CHOICES, null=True)
-    # size = models.CharField(max_length=128)
-    colors = models.ManyToManyField(
-        Color,
-        related_name='item_sizes',
-        through='ItemSizeColor'
-    )
 class ItemSizeColor(models.Model):
     XL = 1
     XXL = 2
@@ -59,7 +40,7 @@ class ItemSizeColor(models.Model):
 
     Size_CHOICES = ((XL, 'XL'), (XXL, 'XXL'), (S, 'S'),(L,'L'))
     ##dont Forget 
-    size_category = models.PositiveSmallIntegerField(
+    size = models.PositiveSmallIntegerField(
         choices=Size_CHOICES, null=True)
     # item_size = models.ForeignKey(ItemSize, on_delete=models.CASCADE)
 
@@ -73,6 +54,9 @@ class ItemSizeColor(models.Model):
         choices=Color_CHOICES, null=True)
     prod = models.ForeignKey(Products,on_delete=models.CASCADE)
     quantity = models.IntegerField(default=0)
+
+    class Meta:
+        unique_together = ("color", "size")
 
     # class Meta:
     #     db_table = 'item_colors'
