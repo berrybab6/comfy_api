@@ -1,6 +1,5 @@
-from pyexpat import model
 from rest_framework import serializers
-from .models import ItemSizeColor, Products
+from .models import ComfyProducts, ComfySale, Dimension, ItemSizeColor, ProductImages, Products, ShippingInfo
 
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
@@ -11,3 +10,28 @@ class ColorSizeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ItemSizeColor
         fields = "__all__"
+
+class ComfyProductsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ComfyProducts
+        fields = "__all__"
+class ComfySaleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ComfySale
+        fields = "__all__"
+class DimensionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Dimension
+        fields = "__all__"
+        
+
+class ShippingInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ShippingInfo
+        fields = "__all__"
+
+class ProductImagesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductImages
+        fields = "__all__"
+        
