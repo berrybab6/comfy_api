@@ -8,7 +8,7 @@ from django.db import models
 
 # Create your models here.
 class ComfyProducts(models.Model):
-    name = models.CharField(max_length=255,null=False,blank=False)
+    name = models.CharField(max_length=255,null=False,blank=False, unique=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_created_gmt = models.DateTimeField(null=True,blank=True)
     date_modified = models.DateTimeField(blank=True,null=True)
@@ -20,6 +20,7 @@ class ComfyProducts(models.Model):
     description = models.CharField(max_length=340,blank=True,null=True)
     short_description = models.CharField(max_length=255,blank=True,null=True)
     sku = models.CharField(max_length=100, default="wp_pennant")
+    image_url = models.ImageField(upload_to = "products",null=True, blank=True)
 
     price = models.DecimalField(max_digits=7, decimal_places=3)
     regular_price = models.DecimalField(max_digits=7, decimal_places=2,null=True)

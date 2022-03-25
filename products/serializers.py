@@ -11,6 +11,11 @@ class ColorSizeSerializer(serializers.ModelSerializer):
         model = ItemSizeColor
         fields = "__all__"
 
+class ImageCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ComfyProducts
+        fields = ['image_url']
+
 class ComfyProductsSerializer(serializers.ModelSerializer):
     class Meta:
         model = ComfyProducts
