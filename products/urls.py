@@ -16,7 +16,9 @@ router.register('product_images', views.ProductImagesView)
 
 urlpatterns = [
     path('',include(router.urls)),
-    path("product_detail/<int:pk>", views.ProductsDetailView.as_view(), name="User by role"),
+    # path("product_detail/<int:pk>", views.ProductsDetailView.as_view(), name="User by role"),
+    path("product_detail/<int:pk>", views.ComfyProductsDetailView.as_view(), name="ComfyProduct Detail"),
+    path("image_category/<int:category>",views.ImageCategoryProductsView.as_view(), name="Image Category"),
     path("featured/", views.FeaturedProductsView.as_view(), name="Featured Products"),
     path("newest/", views.NewestProductsView.as_view(), name="Newest Products"),
     path("product_by_category/<int:category>", views.CategoryProductsView.as_view(), name="Products By Category"),
