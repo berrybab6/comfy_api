@@ -8,7 +8,7 @@ from django.db import models
 
 # Create your models here.
 class ComfyProducts(models.Model):
-    name = models.CharField(max_length=255,null=False,blank=False)
+    name = models.CharField(max_length=255,null=False,blank=False, unique=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_created_gmt = models.DateTimeField(null=True,blank=True)
     date_modified = models.DateTimeField(blank=True,null=True)
