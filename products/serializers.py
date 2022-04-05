@@ -24,7 +24,7 @@ class ComfyProductsSerializer(serializers.ModelSerializer):
 class ComfyProductsTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ComfyProducts
-        fields = ["name", "price", "regular_price", "item_type", "prod_category", "image_url"]
+        fields = ["id","name", "price", "regular_price", "item_type", "prod_category", "image_url"]
 
 class ComfySaleSerializer(serializers.ModelSerializer):
     class Meta:
