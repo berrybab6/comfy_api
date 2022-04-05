@@ -6,7 +6,7 @@ from . import views
 
 app_name = 'products'
 router = routers.DefaultRouter()
-router.register('product_list',views.ProductListView)
+# router.register('product_list',views.ProductListView)
 router.register('color_size',views.ItemSizeListView)
 router.register('comfy_products', views.ComfyProductView)
 router.register('dimension', views.DimensionView)
