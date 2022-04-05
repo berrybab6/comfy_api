@@ -3,19 +3,13 @@ from math import prod
 from django.shortcuts import render
 # from html5lib import serialize
 from rest_framework import viewsets
-from .models import ComfyProducts, ComfySale, Dimension, ItemSizeColor, ProductImages, Products, ShippingInfo
+from .models import ComfyProducts, ComfySale, Dimension, ItemSizeColor, ProductImages, ShippingInfo
 from rest_framework import generics, permissions, status
 from django.http import JsonResponse
 
-from .serializers import ColorSizeSerializer, ComfyProductsSerializer, ComfySaleSerializer, DimensionSerializer, ImageCategorySerializer, ProductImagesSerializer, ProductSerializer, ShippingInfoSerializer
+from .serializers import ColorSizeSerializer, ComfyProductsSerializer, ComfySaleSerializer, DimensionSerializer, ImageCategorySerializer, ProductImagesSerializer, ShippingInfoSerializer
 # Create your views here.
 
-class ProductListView(viewsets.ModelViewSet):
-    serializer_class = ProductSerializer
-    queryset = Products.objects.all()
-
-    def get_queryset(self):
-        return super().get_queryset()
 
 class ComfyProductView(viewsets.ModelViewSet):
     serializer_class = ComfyProductsSerializer
