@@ -20,6 +20,12 @@ class ComfyProductsSerializer(serializers.ModelSerializer):
     class Meta:
         model = ComfyProducts
         fields = "__all__"
+
+class ComfyProductsTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ComfyProducts
+        fields = ["name", "price", "regular_price", "item_type", "prod_category", "image_url"]
+
 class ComfySaleSerializer(serializers.ModelSerializer):
     class Meta:
         model = ComfySale
