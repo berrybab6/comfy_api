@@ -10,34 +10,40 @@ from django.db import models
 class ComfyProducts(models.Model):
     name = models.CharField(max_length=255,null=False,blank=False, unique=True)
     date_created = models.DateTimeField(auto_now_add=True)
-    date_created_gmt = models.DateTimeField(null=True,blank=True)
     date_modified = models.DateTimeField(blank=True,null=True)
-    date_modified_gmt = models.DateTimeField(blank=True,null=True)
-    name = models.CharField(max_length=255,null=False,blank=False, default="simple")
-    status = models.CharField(default="publish", max_length=100)
+    # status = models.CharField(default="publish", max_length=100)
     featured = models.BooleanField(default=False)
     catalog_visiblity = models.CharField(default="visible",max_length=100)
     description = models.CharField(max_length=340,blank=True,null=True)
     short_description = models.CharField(max_length=255,blank=True,null=True)
-    sku = models.CharField(max_length=100, default="wp_pennant")
     image_url = models.ImageField(upload_to = "products",null=True, blank=True)
+
 
     price = models.DecimalField(max_digits=7, decimal_places=3)
     regular_price = models.DecimalField(max_digits=7, decimal_places=2,null=True)
-    price = models.DecimalField(max_digits=7, decimal_places=3)
 
     WOMENS = 1
     MENS = 2
     KIDS = 3
 
     CATEGORY_CHOICES = ((WOMENS, 'womens'), (MENS, 'mens'), (KIDS, 'kids'))
-      
-     
+    T_SHIRT = 1
+    TROUSER = 2
+    SKIRT = 3
+    DRESS = 4
+    ACCESORY = 5
+    TOYS = 6
+    BAG = 7
+
+    ITEM_TYPE = ((T_SHIRT,'t_shirts'), (TROUSER, 'trouser'), (SKIRT, 'skirt'), (DRESS, 'dress'), (ACCESORY, 'accesory'), (TOYS,'toys'), (BAG,'bag'))       
+    item_type = models.PositiveSmallIntegerField(
+        choices=ITEM_TYPE, null=True)
     prod_category = models.PositiveSmallIntegerField(
         choices=CATEGORY_CHOICES, null=True)
     brand = models.CharField(max_length=100,null=True, blank=True)
 
     # sale_price = models.DecimalField(max_digits=5, decimal_places=3,null=True)
+    
 
     def __str__(self):
         return  self.name
@@ -93,33 +99,6 @@ class ProductImages(models.Model):
     def __str__(self):
         return  self.comfy_product.name
 
-class Products(models.Model):
-    prod_title = models.CharField(max_length=255,null=False,blank=False)
-    prod_description = models.CharField(max_length=255,null=True,blank=True)
-    posted_at = models.DateTimeField(auto_now_add=True)
-    price_updated_at = models.DateTimeField(blank=True,null=True)
-    price = models.DecimalField(max_digits=7, decimal_places=3)
-    length = models.DecimalField(max_digits=5, decimal_places=3,null=True)
-    height = models.DecimalField(max_digits=6, decimal_places=3,null=True)
-    width = models.DecimalField(max_digits=7, decimal_places=3,null=True)
-    prod_image = models.ImageField(upload_to = "products",null=True,blank=True)
-    brand = models.CharField(max_length=150,blank=True,null=True)
-    
-    WOMENS = 1
-    MENS = 2
-    KIDS = 3
-
-    CATEGORY_CHOICES = ((WOMENS, 'womens'), (MENS, 'mens'), (KIDS, 'kids'))
-    ##dont Forget 
-    prod_category = models.PositiveSmallIntegerField(
-        choices=CATEGORY_CHOICES, null=True)
-    # sizeColor = models.ManyToManyField('ItemSizeColor', related_name='products')
-
-
-# 
-    # def __str__(self):
-        # return "%s the Product" % self.comfy_product.name
-
 class ItemSizeColor(models.Model):
     XL = 1
     XXL = 2
@@ -146,12 +125,4 @@ class ItemSizeColor(models.Model):
     class Meta:
         unique_together = ("color", "size")
 
-    # class Meta:
-    #     db_table = 'item_colors'
-    #     constraints = [
-    #         models.UniqueConstraint(
-    #             fields=('item_size', 'color'),
-    #             name='unique_size_color'
-    #         )
-    #     ]
 

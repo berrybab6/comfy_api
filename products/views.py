@@ -3,45 +3,56 @@ from math import prod
 from django.shortcuts import render
 # from html5lib import serialize
 from rest_framework import viewsets
-from .models import ComfyProducts, ComfySale, Dimension, ItemSizeColor, ProductImages, Products, ShippingInfo
+from .models import ComfyProducts, ComfySale, Dimension, ItemSizeColor, ProductImages, ShippingInfo
 from rest_framework import generics, permissions, status
 from django.http import JsonResponse
 
-from .serializers import ColorSizeSerializer, ComfyProductsSerializer, ComfySaleSerializer, DimensionSerializer, ImageCategorySerializer, ProductImagesSerializer, ProductSerializer, ShippingInfoSerializer
+from .serializers import ColorSizeSerializer, ComfyProductsSerializer, ComfyProductsTypeSerializer, ComfySaleSerializer, DimensionSerializer, ImageCategorySerializer, ProductImagesSerializer, ShippingInfoSerializer
 # Create your views here.
 
-class ProductListView(viewsets.ModelViewSet):
-    serializer_class = ProductSerializer
-    queryset = Products.objects.all()
-
-    def get_queryset(self):
-        return super().get_queryset()
 
 class ComfyProductView(viewsets.ModelViewSet):
-    serializer_class = ComfyProductsSerializer
+    serializer_class = ComfyProductsTypeSerializer
     queryset = ComfyProducts.objects.all()
 
     
     def get_queryset(self):
         return super().get_queryset()
 
-class FeaturedProductsView(generics.GenericAPIView):
-    serializer_class = ComfyProductsSerializer
+class ProductsByTypeView(generics.GenericAPIView):
+    serializer_class = ComfyProductsTypeSerializer
     queryset = ComfyProducts.objects.all()
     permission_classes = [permissions.AllowAny, ]
 
-    def get(self, request):
-        prod = ComfyProducts.objects.filter(featured =True)
+    def get(self, request, category = None, itemType = None):
+        prod = ComfyProducts.objects.filter(prod_category=category, item_type = itemType)
         if prod:
-            ser = ComfyProductsSerializer(prod, many=True)
+            ser = ComfyProductsTypeSerializer(prod, many=True)
             return JsonResponse({"products":ser.data})
         else:
             JsonResponse({"error":"No Products Found"})
     def get_queryset(self):
         return super().get_queryset()
 
+
+class FeaturedProductsView(generics.GenericAPIView):
+    serializer_class = ComfyProductsTypeSerializer
+    queryset = ComfyProducts.objects.all()
+    permission_classes = [permissions.AllowAny, ]
+
+    def get(self, request):
+        prod = ComfyProducts.objects.filter(featured =True)
+        if prod:
+            ser = ComfyProductsTypeSerializer(prod, many=True)
+            return JsonResponse({"products":ser.data})
+        else:
+            JsonResponse({"error":"No Products Found"})
+    def get_queryset(self):
+        return super().get_queryset()
+
+
 class NewestProductsView(generics.GenericAPIView):
-    serializer_class = ComfyProductsSerializer
+    serializer_class = ComfyProductsTypeSerializer
     queryset = ComfyProducts.objects.all()
     permission_classes = [permissions.AllowAny, ]
 
@@ -53,7 +64,7 @@ class NewestProductsView(generics.GenericAPIView):
 
         prod = ComfyProducts.objects.filter(date_created__range=[d, zare])
         if prod:
-            ser = ComfyProductsSerializer(prod, many=True)
+            ser = ComfyProductsTypeSerializer(prod, many=True)
             return JsonResponse({"products":ser.data})
         else:
             return JsonResponse({"error":"No Products Found"})
@@ -77,23 +88,19 @@ class ImageCategoryProductsView(generics.GenericAPIView):
             return JsonResponse({"error":"No Image Found!!!"})
 
 class CategoryProductsView(generics.GenericAPIView):
-    serializer_class = ComfyProductsSerializer
+    serializer_class = ComfyProductsTypeSerializer
     queryset = ComfyProducts.objects.all()
     permission_classes = [permissions.AllowAny, ]
 
     def get(self, request,category=None):
-        featured = ComfyProducts.objects.filter(prod_category=category, featured=True)
-        zare = datetime.today()
+        # featured = ComfyProducts.objects.filter(prod_category=category)
         
-            
-        d = datetime.today() - timedelta(days=7)
+        prod = ComfyProducts.objects.filter(prod_category=category)
+        if prod :
+            # ser = ComfyProductsSerializer(featured, many=True)
+            ser2 = ComfyProductsTypeSerializer(prod, many=True)
 
-        prod = ComfyProducts.objects.filter(prod_category=category, date_created__range=[d, zare])
-        if prod and featured:
-            ser = ComfyProductsSerializer(featured, many=True)
-            ser2 = ComfyProductsSerializer(prod, many=True)
-
-            return JsonResponse({"featured":ser.data, "newest":ser2.data})
+            return JsonResponse({"products":ser2.data})
         else:
             return JsonResponse({"error":"No Products Found"})
     def get_queryset(self):
@@ -135,7 +142,7 @@ class ItemSizeListView(viewsets.ModelViewSet):
     def get_queryset(self):
         return super().get_queryset()
 
- 
+
 class ComfyProductsDetailView(generics.GenericAPIView):
     queryset = [ComfyProducts.objects.all(),Dimension.objects.all(),ProductImages.objects.all(), ItemSizeColor.objects.all()]
     
@@ -149,16 +156,16 @@ class ComfyProductsDetailView(generics.GenericAPIView):
             item = ItemSizeColor.objects.filter(prod=product)
             images = ProductImages.objects.filter(comfy_product=product)
             dimension = Dimension.objects.filter(comfy_product=product)
-            if images and dimension:
-                ser = ColorSizeSerializer(item, many=True)
-                ser3 = DimensionSerializer(dimension,many=True)
-                ser4 = ProductImagesSerializer(images, many=True)
-                ser2 = ComfyProductsSerializer(product)
-                return JsonResponse({"product":ser2.data, "item":ser.data,"dimension":ser3.data, "Images":ser4.data}, status=status.HTTP_200_OK)
-            else:
-                return JsonResponse({"error":"There is no other detail with this prodID"}, status=status.HTTP_404_NOT_FOUND)
+            # if images :
+            ser = ColorSizeSerializer(item, many=True)
+            ser3 = DimensionSerializer(dimension,many=True)
+            ser4 = ProductImagesSerializer(images, many=True)
+            ser2 = ComfyProductsSerializer(product)
+            return JsonResponse({"product":ser2.data, "item":ser.data,"dimension":ser3.data, "Images":ser4.data}, status=status.HTTP_200_OK)
         else:
-            return JsonResponse({"error":"Product Doesnot exist"}, status=status.HTTP_404_NOT_FOUND)
+            return JsonResponse({"error":"There is no other detail with this prodID"}, status=status.HTTP_404_NOT_FOUND)
+        # else:
+            # return JsonResponse({"error":"Product Doesnot exist"}, status=status.HTTP_404_NOT_FOUND)
 
 
 
