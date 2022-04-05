@@ -7,17 +7,33 @@ from .models import ComfyProducts, ComfySale, Dimension, ItemSizeColor, ProductI
 from rest_framework import generics, permissions, status
 from django.http import JsonResponse
 
-from .serializers import ColorSizeSerializer, ComfyProductsSerializer, ComfySaleSerializer, DimensionSerializer, ImageCategorySerializer, ProductImagesSerializer, ShippingInfoSerializer
+from .serializers import ColorSizeSerializer, ComfyProductsSerializer, ComfyProductsTypeSerializer, ComfySaleSerializer, DimensionSerializer, ImageCategorySerializer, ProductImagesSerializer, ShippingInfoSerializer
 # Create your views here.
 
 
 class ComfyProductView(viewsets.ModelViewSet):
-    serializer_class = ComfyProductsSerializer
+    serializer_class = ComfyProductsTypeSerializer
     queryset = ComfyProducts.objects.all()
 
     
     def get_queryset(self):
         return super().get_queryset()
+
+class ProductsByTypeView(generics.GenericAPIView):
+    serializer_class = ComfyProductsTypeSerializer
+    queryset = ComfyProducts.objects.all()
+    permission_classes = [permissions.AllowAny, ]
+
+    def get(self, request, category = None, itemType = None):
+        prod = ComfyProducts.objects.filter(prod_category=category, item_type = itemType)
+        if prod:
+            ser = ComfyProductsTypeSerializer(prod, many=True)
+            return JsonResponse({"products":ser.data})
+        else:
+            JsonResponse({"error":"No Products Found"})
+    def get_queryset(self):
+        return super().get_queryset()
+
 
 class FeaturedProductsView(generics.GenericAPIView):
     serializer_class = ComfyProductsSerializer
@@ -33,6 +49,7 @@ class FeaturedProductsView(generics.GenericAPIView):
             JsonResponse({"error":"No Products Found"})
     def get_queryset(self):
         return super().get_queryset()
+
 
 class NewestProductsView(generics.GenericAPIView):
     serializer_class = ComfyProductsSerializer
@@ -71,23 +88,19 @@ class ImageCategoryProductsView(generics.GenericAPIView):
             return JsonResponse({"error":"No Image Found!!!"})
 
 class CategoryProductsView(generics.GenericAPIView):
-    serializer_class = ComfyProductsSerializer
+    serializer_class = ComfyProductsTypeSerializer
     queryset = ComfyProducts.objects.all()
     permission_classes = [permissions.AllowAny, ]
 
     def get(self, request,category=None):
-        featured = ComfyProducts.objects.filter(prod_category=category, featured=True)
-        zare = datetime.today()
+        # featured = ComfyProducts.objects.filter(prod_category=category)
         
-            
-        d = datetime.today() - timedelta(days=7)
-
-        prod = ComfyProducts.objects.filter(prod_category=category, date_created__range=[d, zare])
-        if prod and featured:
-            ser = ComfyProductsSerializer(featured, many=True)
+        prod = ComfyProducts.objects.filter(prod_category=category)
+        if prod :
+            # ser = ComfyProductsSerializer(featured, many=True)
             ser2 = ComfyProductsSerializer(prod, many=True)
 
-            return JsonResponse({"featured":ser.data, "newest":ser2.data})
+            return JsonResponse({"products":ser2.data})
         else:
             return JsonResponse({"error":"No Products Found"})
     def get_queryset(self):
@@ -129,7 +142,7 @@ class ItemSizeListView(viewsets.ModelViewSet):
     def get_queryset(self):
         return super().get_queryset()
 
- 
+
 class ComfyProductsDetailView(generics.GenericAPIView):
     queryset = [ComfyProducts.objects.all(),Dimension.objects.all(),ProductImages.objects.all(), ItemSizeColor.objects.all()]
     
