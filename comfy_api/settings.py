@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework_swagger',
+    'drf_yasg',
     'rest_framework',
     'products',
 
@@ -94,7 +96,12 @@ DATABASES = {
     }
 }
 
-
+REST_FRAMEWORK = {
+    # 'DEFAULT_PAGINATION_CLASS':
+    # 'rest_framework.pagination.PageNumberPagination',
+    # 'PAGE_SIZE': 100,
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'  # <-- Here
+}
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
