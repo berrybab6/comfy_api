@@ -15,7 +15,7 @@ COPY ./requirements.txt .
 
 RUN apk add --update --no-cache postgresql-client python3-dev \
  libffi-dev jpeg-dev freetype-dev libjpeg-turbo-dev libpng-dev \
- curl jq 
+ curl jq tk
 
 RUN apk add --update --no-cache --virtual .tmp-build-deps \
  gcc g++ libc-dev linux-headers postgresql-dev musl-dev zlib \
@@ -39,8 +39,8 @@ WORKDIR /app
 # COPY ./fixmycity_api .
 
 
-# COPY ./entrypoint.sh /
-# ENTRYPOINT [ "sh","/entrypoint.sh" ]
+COPY ./entrypoint.sh /
+ENTRYPOINT [ "sh","/entrypoint.sh" ]
  
 # collect static files
 RUN python manage.py collectstatic --noinput
