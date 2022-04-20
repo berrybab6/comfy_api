@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
-
+import dj_database_url
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -19,11 +20,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-zn=pbi7m2$#bsyv4@-aaayu!vhvt^pqmxwjcs3g9bfoj5^6%5+'
+SECRET_KEY = os.environ.get('SECRET_KEY', default='foo')
+
+# SECRET_KEY = 'django-insecure-zn=pbi7m2$#bsyv4@-aaayu!vhvt^pqmxwjcs3g9bfoj5^6%5+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
+DEBUG = int(os.environ.get('DEBUG', default=1))
 
 ALLOWED_HOSTS = ['*']
 
@@ -47,6 +52,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -96,6 +102,12 @@ DATABASES = {
     }
 }
 
+
+
+DATABASE_URL = os.environ.get('DATABASE_URL')
+db_from_env = dj_database_url.config(default=DATABASE_URL, conn_max_age=500, ssl_require=True)
+DATABASES['default'].update(db_from_env)
+
 REST_FRAMEWORK = {
     # 'DEFAULT_PAGINATION_CLASS':
     # 'rest_framework.pagination.PageNumberPagination',
@@ -138,13 +150,25 @@ USE_TZ = True
 
 # STATIC_URL = 'static/'
 import os
-STATIC_URL = '/static/'
+from decouple import config
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': "fixmy",
+    'API_KEY': "643632981747267",
+    'API_SECRET': "Td25NOCD3ztR2wjDx475BeQdh_w",
+}
+
 MEDIA_URL = '/images/'
-# STATICFILES_DIRS  = [
-#     BASE_DIR / 'frontend/static'
-# ] 
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-MEDIA_ROOT = os.path.join(BASE_DIR, 'images')
+MEDIA_ROOT = 'media'
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 # Default primary key field type
