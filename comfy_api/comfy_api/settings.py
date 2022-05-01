@@ -135,7 +135,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://comfy-api.herokuapp.com/",
+    "http://comfy-api.herokuapp.com",
 ]
 
 CORS_ALLOW_METHODS = [
