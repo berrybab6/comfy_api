@@ -7,12 +7,12 @@ from .models import ComfyProducts, ComfySale, Dimension, ItemSizeColor, ProductI
 from rest_framework import generics, permissions, status
 from django.http import JsonResponse
 
-from .serializers import ColorSizeSerializer, ComfyProductsSerializer, ComfyProductsTypeSerializer, ComfySaleSerializer, DimensionSerializer, ImageCategorySerializer, ProductImagesSerializer, ShippingInfoSerializer
+from .serializers import ColorSizeSerializer, ComfyProductsAllSerializer, ComfyProductsSerializer, ComfyProductsTypeSerializer, ComfySaleSerializer, DimensionSerializer, ImageCategorySerializer, ProductImagesSerializer, ShippingInfoSerializer
 # Create your views here.
 
 
 class ComfyProductView(viewsets.ModelViewSet):
-    serializer_class = ComfyProductsTypeSerializer
+    serializer_class = ComfyProductsAllSerializer
     queryset = ComfyProducts.objects.all()
 
     
