@@ -134,5 +134,5 @@ class FavoriteProduct(models.Model):
     added_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        # index_together = ["first_name", "last_name"]
+        index_together = ["wished_item", "user_id"]
         db_table = 'favorite'
