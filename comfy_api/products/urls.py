@@ -7,12 +7,12 @@ from . import views
 app_name = 'products'
 router = routers.DefaultRouter()
 # router.register('product_list',views.ProductListView)
-# router.register('color_size',views.ItemSizeListView)
+router.register('color_size',views.ItemSizeListView)
 router.register('comfy_products', views.ComfyProductView)
-# router.register('dimension', views.DimensionView)
-# router.register('comfy_sale',views.ComfySaleView)
+router.register('dimension', views.DimensionView)
+router.register('comfy_sale',views.ComfySaleView)
 # router.register('shipping_info',views.ShippingInfoView)
-# router.register('product_images', views.ProductImagesView)
+router.register('product_images', views.ProductImagesView)
 
 
 urlpatterns = [

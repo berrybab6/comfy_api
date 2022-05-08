@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import ComfyProducts, ComfySale, Dimension, ItemSizeColor, ProductImages,  ShippingInfo
+from .models import ComfyProducts, ComfySale, Dimension, FavoriteProduct, ItemSizeColor, ProductImages,  ShippingInfo
 
 # class ProductSerializer(serializers.ModelSerializer):
 #     class Meta:
@@ -49,5 +49,9 @@ class ShippingInfoSerializer(serializers.ModelSerializer):
 class ProductImagesSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductImages
+        fields = "__all__"
+class FavoriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FavoriteProduct
         fields = "__all__"
         

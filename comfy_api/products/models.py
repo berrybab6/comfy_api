@@ -5,6 +5,8 @@ from statistics import mode
 from turtle import width
 from unicodedata import category
 from django.db import models
+from account.models import User
+from django.conf import settings
 
 # Create your models here.
 class ComfyProducts(models.Model):
@@ -126,3 +128,11 @@ class ItemSizeColor(models.Model):
         unique_together = ("color", "size")
 
 
+class FavoriteProduct(models.Model):
+    wished_item = models.ForeignKey(ComfyProducts, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    added_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        # index_together = ["first_name", "last_name"]
+        db_table = 'favorite'

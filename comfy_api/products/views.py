@@ -3,11 +3,11 @@ from math import prod
 from django.shortcuts import render
 # from html5lib import serialize
 from rest_framework import viewsets
-from .models import ComfyProducts, ComfySale, Dimension, ItemSizeColor, ProductImages, ShippingInfo
+from .models import ComfyProducts, ComfySale, Dimension, FavoriteProduct, ItemSizeColor, ProductImages, ShippingInfo
 from rest_framework import generics, permissions, status
 from django.http import JsonResponse
 
-from .serializers import ColorSizeSerializer, ComfyProductsAllSerializer, ComfyProductsSerializer, ComfyProductsTypeSerializer, ComfySaleSerializer, DimensionSerializer, ImageCategorySerializer, ProductImagesSerializer, ShippingInfoSerializer
+from .serializers import ColorSizeSerializer, ComfyProductsAllSerializer, ComfyProductsSerializer, ComfyProductsTypeSerializer, ComfySaleSerializer, DimensionSerializer, FavoriteSerializer, ImageCategorySerializer, ProductImagesSerializer, ShippingInfoSerializer
 # Create your views here.
 
 
@@ -171,3 +171,38 @@ class ComfyProductsDetailView(generics.GenericAPIView):
 
     def get_queryset(self):
         return super().get_queryset()
+
+
+##################Favorite
+from account.models import User
+class FavoriteProductsView(generics.GenericAPIView):
+    serializer_class = [FavoriteProduct, ComfyProductsSerializer]
+    queryset = [FavoriteProduct.objects.all(),ComfyProducts.objects.all()]
+    permission_classes = [permissions.AllowAny, ]
+
+    def get(self, request,user_id=None):
+        user= User.objects.get(id=user_id)
+        if user:
+            favs = FavoriteProduct.objects.filter(user_id=user).order_by('-added_date')
+
+            if favs:
+                ser = FavoriteSerializer(favs, many=True)
+                return JsonResponse({"products":ser.data})
+            else:
+                return JsonResponse({"error":"No Fav item Found!!!"})
+        else:
+            return JsonResponse({"error":"No User Found with this id!!!"})
+
+    def post(self, request,user_id=None, prod_id=None):
+        user= User.objects.get(id=user_id)
+        prod = ComfyProducts.objects.get(id=prod_id)
+        if user and prod:
+            fav = FavoriteProduct.objects.create(user_id=user, wished_item=prod_id)
+            fav.save()
+            ser = FavoriteSerializer(fav)
+            return JsonResponse({"products":ser.data})
+
+        else:
+            return JsonResponse({"error":"No User item Found!!!"})
+
+        favs = FavoriteProduct.objects.filter(user_id=user).order_by('-added_date')

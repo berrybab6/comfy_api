@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'drf_yasg',
     'rest_framework',
     'products',
+    'rest_framework.authtoken',
+    'account',
     'corsheaders',
 
 ]
@@ -63,6 +65,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'comfy_api.urls'
+AUTH_USER_MODEL = 'account.User'
 
 TEMPLATES = [
     {
