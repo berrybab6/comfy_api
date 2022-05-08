@@ -10,6 +10,8 @@ router = routers.DefaultRouter()
 router.register('color_size',views.ItemSizeListView)
 router.register('comfy_products', views.ComfyProductView)
 router.register('dimension', views.DimensionView)
+# router.register('favorite', views.FavoriteProductsView)
+
 router.register('comfy_sale',views.ComfySaleView)
 # router.register('shipping_info',views.ShippingInfoView)
 router.register('product_images', views.ProductImagesView)
@@ -23,6 +25,7 @@ urlpatterns = [
     path("featured/", views.FeaturedProductsView.as_view(), name="Featured Products"),
     path("newest/", views.NewestProductsView.as_view(), name="Newest Products"),
     path("<int:category>/<int:itemType>", views.ProductsByTypeView.as_view(), name=" Products by Type"),
+    path("favorite/<int:user_id>", views.FavoriteProductsView.as_view(), name="Favorite Products"),
 
 
     path("product_by_category/<int:category>", views.CategoryProductsView.as_view(), name="Products By Category"),
