@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from math import prod
 from django.shortcuts import render
+# from requests import Response
 # from html5lib import serialize
 from rest_framework import viewsets
 from .models import ComfyProducts, ComfySale, Dimension, FavoriteProduct, ItemSizeColor, ProductImages, ShippingInfo
@@ -14,7 +15,6 @@ from .serializers import ColorSizeSerializer, ComfyProductsAllSerializer, ComfyP
 class ComfyProductView(viewsets.ModelViewSet):
     serializer_class = ComfyProductsAllSerializer
     queryset = ComfyProducts.objects.all()
-
     
     def get_queryset(self):
         return super().get_queryset()
@@ -25,12 +25,17 @@ class ProductsByTypeView(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny, ]
 
     def get(self, request, category = None, itemType = None):
-        prod = ComfyProducts.objects.filter(prod_category=category, item_type = itemType)
-        if prod:
-            ser = ComfyProductsTypeSerializer(prod, many=True)
-            return JsonResponse({"products":ser.data})
-        else:
-            JsonResponse({"error":"No Products Found"})
+        try:
+            if ComfyProducts.objects.filter(prod_category=category, item_type = itemType).exists():
+                prod = ComfyProducts.objects.filter(prod_category=category, item_type = itemType)
+                ser = ComfyProductsTypeSerializer(prod, many=True)
+                return JsonResponse({"products":ser.data})
+            else:
+                return JsonResponse({"error":"No Products Found","products":[]},status=204)
+        except:
+            print("Helllloooo")
+            return JsonResponse({"error":"No Product"})
+
     def get_queryset(self):
         return super().get_queryset()
 
@@ -151,6 +156,7 @@ class ComfyProductsDetailView(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny, ]
 
     def get(self, request,pk=None):
+        # try:
         product = ComfyProducts.objects.get(id=pk)
         if product:
             item = ItemSizeColor.objects.filter(prod=product)
@@ -166,7 +172,7 @@ class ComfyProductsDetailView(generics.GenericAPIView):
             return JsonResponse({"error":"There is no other detail with this prodID"}, status=status.HTTP_404_NOT_FOUND)
         # else:
             # return JsonResponse({"error":"Product Doesnot exist"}, status=status.HTTP_404_NOT_FOUND)
-
+        
 
 
     def get_queryset(self):
@@ -181,28 +187,49 @@ class FavoriteProductsView(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny, ]
 
     def get(self, request,user_id=None):
-        user= User.objects.get(id=user_id)
-        if user:
-            favs = FavoriteProduct.objects.filter(user_id=user).order_by('-added_date')
+        # user= User.objects.get(id=user_id)
+        try:
+            if User.objects.filter(id=user_id).exists():
+                user= User.objects.get(id=user_id)
 
-            if favs:
-                ser = FavoriteSerializer(favs, many=True)
-                return JsonResponse({"products":ser.data})
+                favs = FavoriteProduct.objects.filter(user_id=user , status=True).order_by('-added_date')
+
+                if favs:
+                    ser = FavoriteSerializer(favs, many=True)
+                    return JsonResponse({"products":ser.data})
+                else:
+                    return JsonResponse({"error":"No Fav item Found!!!"})
             else:
-                return JsonResponse({"error":"No Fav item Found!!!"})
-        else:
-            return JsonResponse({"error":"No User Found with this id!!!"})
+                return JsonResponse({"error":"No User Found with this id!!!"})
+        except:
+            return JsonResponse({"error":"No matching query!!!"}, status = 500)
 
-    def post(self, request,user_id=None, prod_id=None):
-        user= User.objects.get(id=user_id)
-        prod = ComfyProducts.objects.get(id=prod_id)
-        if user and prod:
-            fav = FavoriteProduct.objects.create(user_id=user, wished_item=prod_id)
-            fav.save()
-            ser = FavoriteSerializer(fav)
-            return JsonResponse({"products":ser.data})
 
-        else:
-            return JsonResponse({"error":"No User item Found!!!"})
+    def post(self, request,user_id=None):
+        try:
+            if User.objects.filter(id=user_id).exists():
+                print("LOLLLLL")
+                prod_id=request.data["prod_id"]
 
-        favs = FavoriteProduct.objects.filter(user_id=user).order_by('-added_date')
+                if ComfyProducts.objects.filter(id=prod_id).exists():
+                    user= User.objects.get(id=user_id)
+                    prod = ComfyProducts.objects.get(id=prod_id)
+                    if(FavoriteProduct.objects.filter(user_id=user, wished_item=prod).exists()):
+                        fav = FavoriteProduct.objects.get(user_id=user, wished_item=prod)
+                        fav.status = not fav.status
+                        fav.save()
+                        ser = FavoriteSerializer(fav)
+                        return JsonResponse({"products":ser.data})
+                    else:
+                        fav = FavoriteProduct.objects.create(user_id=user, wished_item=prod)
+                        fav.save()
+                        ser = FavoriteSerializer(fav)
+                        return JsonResponse({"products":ser.data})
+                return JsonResponse({"error":"No Product Found!!!"},status=204)
+
+            else:
+                return JsonResponse({"error":"No User item Found!!!"}, status=204)
+
+        # favs = FavoriteProduct.objects.filter(user_id=user).order_by('-added_date')
+        except:
+            return JsonResponse({"error":"No matching query!!!"}, status = 500)

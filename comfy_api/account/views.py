@@ -23,6 +23,23 @@ from rest_framework.authtoken.models import Token
 
 # Create your views here.
 
+class UserDetailView(generics.GenericAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializers
+    permission_classes = [permissions.AllowAny, ]
+
+    def get(self, request,pk=None):
+        try:
+
+            if User.objects.filter(id=pk).exists():
+                user = User.objects.get(id=pk)
+                serialize = UserSerializers(user)
+                return JsonResponse(serialize.data,safe=False, status=status.HTTP_200_OK)
+            else:
+                return JsonResponse({"message":"No user Found with this id"}, status=status.HTTP_404_NOT_FOUND)
+        except:
+            return JsonResponse({"message":"No user Found "}, status=status.HTTP_404_NOT_FOUND)
+
 class UserCreateView(generics.GenericAPIView):
     serializer_class = UserSerializers
     queryset = User.objects.all()
@@ -50,16 +67,15 @@ class UserCreateView(generics.GenericAPIView):
        
         else:
             return JsonResponse({"error":"Empty_field"})
+    def get(self, request):
+        if User.objects.all().exists():
+            user = User.objects.all()
 
-
-    def get(self, request,pk=None):
-        user = User.objects.get(id=pk)
-        if user:
-            serialize = UserSerializers(user)
+            serialize = UserSerializers(user,many=True)
             return JsonResponse(serialize.data,safe=False, status=status.HTTP_200_OK)
         else:
             return JsonResponse({"message":"No user Found with this id"}, status=status.HTTP_404_NOT_FOUND)
-
+    
 class LoginUserView(ObtainAuthToken):
     queryset = User.objects.all()
     serializer_class = UserSerializers
