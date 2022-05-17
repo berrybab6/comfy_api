@@ -8,7 +8,7 @@ from .models import ComfyProducts, ComfySale, Dimension, FavoriteProduct, ItemSi
 from rest_framework import generics, permissions, status
 from django.http import JsonResponse
 
-from .serializers import ColorSizeSerializer, ComfyProductsAllSerializer, ComfyProductsSerializer, ComfyProductsTypeSerializer, ComfySaleSerializer, DimensionSerializer, FavoriteSerializer, ImageCategorySerializer, ProductImagesSerializer, ShippingInfoSerializer
+from .serializers import ColorSizeSerializer, ComfyProductsAllSerializer, ComfyProductsSerializer, ComfyProductsTypeSerializer, ComfySaleSerializer, DimensionSerializer, FavoriteSerializer, FavoriteStatusSerializer, ImageCategorySerializer, ProductImagesSerializer, ShippingInfoSerializer
 # Create your views here.
 
 
@@ -198,7 +198,7 @@ class FavoriteProductsView(generics.GenericAPIView):
                     ser = FavoriteSerializer(favs, many=True)
                     return JsonResponse({"products":ser.data})
                 else:
-                    return JsonResponse({"error":"No Fav item Found!!!"})
+                    return JsonResponse({"error":"No Fav item Found!!!","products":[]})
             else:
                 return JsonResponse({"error":"No User Found with this id!!!"})
         except:
@@ -218,12 +218,12 @@ class FavoriteProductsView(generics.GenericAPIView):
                         fav = FavoriteProduct.objects.get(user_id=user, wished_item=prod)
                         fav.status = not fav.status
                         fav.save()
-                        ser = FavoriteSerializer(fav)
+                        ser = FavoriteStatusSerializer(fav)
                         return JsonResponse({"products":ser.data})
                     else:
                         fav = FavoriteProduct.objects.create(user_id=user, wished_item=prod)
                         fav.save()
-                        ser = FavoriteSerializer(fav)
+                        ser = FavoriteStatusSerializer(fav)
                         return JsonResponse({"products":ser.data})
                 return JsonResponse({"error":"No Product Found!!!"},status=204)
 
