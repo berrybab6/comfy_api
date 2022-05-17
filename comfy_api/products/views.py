@@ -182,7 +182,7 @@ class ComfyProductsDetailView(generics.GenericAPIView):
 ##################Favorite
 from account.models import User
 class FavoriteProductsView(generics.GenericAPIView):
-    serializer_class = [FavoriteProduct, ComfyProductsSerializer]
+    serializer_classes = [FavoriteProduct, ComfyProductsSerializer, FavoriteStatusSerializer]
     queryset = [FavoriteProduct.objects.all(),ComfyProducts.objects.all()]
     permission_classes = [permissions.AllowAny, ]
 
@@ -218,14 +218,17 @@ class FavoriteProductsView(generics.GenericAPIView):
                         fav = FavoriteProduct.objects.get(user_id=user, wished_item=prod)
                         fav.status = not fav.status
                         fav.save()
+                        # print("so here right")
                         ser = FavoriteStatusSerializer(fav)
+
                         return JsonResponse({"products":ser.data})
                     else:
                         fav = FavoriteProduct.objects.create(user_id=user, wished_item=prod)
                         fav.save()
                         ser = FavoriteStatusSerializer(fav)
                         return JsonResponse({"products":ser.data})
-                return JsonResponse({"error":"No Product Found!!!"},status=204)
+                else:
+                    return JsonResponse({"error":"No Product Found!!!"},status=204)
 
             else:
                 return JsonResponse({"error":"No User item Found!!!"}, status=204)

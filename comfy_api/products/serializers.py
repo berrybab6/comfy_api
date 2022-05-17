@@ -78,4 +78,4 @@ class FavoriteSerializer(serializers.ModelSerializer):
 class FavoriteStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = FavoriteProduct
-        fields = "status"
+        fields = ["status",]

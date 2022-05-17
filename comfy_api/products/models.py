@@ -132,7 +132,7 @@ class FavoriteProduct(models.Model):
     wished_item = models.ForeignKey(ComfyProducts, on_delete=models.CASCADE)
     user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     added_date = models.DateTimeField(auto_now_add=True)
-    status = models.BooleanField(default=True)
+    status = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ["wished_item", "user_id"]
