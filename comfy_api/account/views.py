@@ -53,13 +53,24 @@ class UserCreateView(generics.GenericAPIView):
         phone_number = request.data.get("phone_number","")
         email = request.data.get("email","")
 
+        admin = request.data.get("admin",False)
+        staff = request.data.get("staff",False)
+
+
         if email and username and password:
-            user = User.objects.create_user(username=username,
+            if admin and staff:
+                user = User.objects.create_superuser(username=username,
                                             email = email,
                                             password=password,
                                             full_name=full_name,
                                             phone_number = phone_number)
-
+            else:
+                user = User.objects.create_user(username=username,
+                                            email = email,
+                                            password=password,
+                                            full_name=full_name,
+                                            phone_number = phone_number)
+           
             ser = UserSerializers(user)
             # return JsonResponse(ser.data, safe=False)
 
