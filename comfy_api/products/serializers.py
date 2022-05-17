@@ -56,6 +56,8 @@ class FavoriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = FavoriteProduct
         fields = "__all__"
+
+
     def to_representation(self, instance):
         data = super().to_representation(instance)
         try:
@@ -73,4 +75,7 @@ class FavoriteSerializer(serializers.ModelSerializer):
         #     user = None
         
         return data  
-        
+class FavoriteStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FavoriteProduct
+        fields = "status"
