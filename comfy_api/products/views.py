@@ -180,7 +180,7 @@ class ComfyProductsDetailView(generics.GenericAPIView):
 
 
 ##################Favorite
-from account.models import User
+from accounts.models import User
 class FavoriteProductsView(generics.GenericAPIView):
     serializer_classes = [FavoriteProduct, ComfyProductsSerializer, FavoriteStatusSerializer]
     queryset = [FavoriteProduct.objects.all(),ComfyProducts.objects.all()]

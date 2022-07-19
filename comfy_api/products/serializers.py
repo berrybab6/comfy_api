@@ -1,4 +1,4 @@
-from account.serializers import UserSerializers
+from accounts.serializers import UserSerializers
 from .models import User
 from rest_framework import serializers
 from .models import ComfyProducts, ComfySale, Dimension, FavoriteProduct, ItemSizeColor, ProductImages,  ShippingInfo
