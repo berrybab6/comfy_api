@@ -5,10 +5,15 @@ from django.contrib.auth import login, logout, authenticate
 from django.http import JsonResponse
 # from rest_framework.decorators import action
 from .models import User
+from rest_framework.response import Response
+from .utils import Utils
+from rest_framework.views import APIView
+
+
 from django.contrib.auth.hashers import make_password,check_password
 
-from .serializers import UserSerializers
-from rest_framework.authtoken.views import ObtainAuthToken
+from .serializers import LoginSerializer, UserSerializers
+# from rest_framework.authtoken.views import ObtainAuthToken
 
 # , authenticate
 from rest_framework.permissions import AllowAny
@@ -86,28 +91,47 @@ class UserCreateView(generics.GenericAPIView):
             return JsonResponse(serialize.data,safe=False, status=status.HTTP_200_OK)
         else:
             return JsonResponse({"message":"No user Found with this id"}, status=status.HTTP_404_NOT_FOUND)
-    
-class LoginUserView(ObtainAuthToken):
+
+class LoginUserView(APIView):
+    permission_classes = [AllowAny, ]
     queryset = User.objects.all()
-    serializer_class = UserSerializers
-    permission_classes = [permissions.AllowAny, ]
+    serializer_class = LoginSerializer
     def post(self, request):
-        username = request.data['username']
-        password = request.data['password']
-        if username == "" or password == "":
-            return JsonResponse({"msg":"Empty Field"}, status=status.HTTP_404_NOT_FOUND)
-        user = authenticate(username=username, password=password)
+        serializer = LoginSerializer(data=request.data)
 
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                token, created = Token.objects.get_or_create(user=user)
+        serializer.is_valid(raise_exception=True)
 
-                ser = UserSerializers(user)
+        user = Utils.authenticate_sector_admin(serializer.validated_data)
+        # queryset = user
+        serializedUser = LoginSerializer(user)
+        token = Utils.encode_token(user)
+        
+        return Response({"data":serializedUser.data, "token":token})
+        
+    def get_queryset(self):
+        return super().get_queryset()
+        
+# class LoginUserView(ObtainAuthToken):
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializers
+#     permission_classes = [permissions.AllowAny, ]
+#     def post(self, request):
+#         username = request.data['username']
+#         password = request.data['password']
+#         if username == "" or password == "":
+#             return JsonResponse({"msg":"Empty Field"}, status=status.HTTP_404_NOT_FOUND)
+#         user = authenticate(username=username, password=password)
 
-                return JsonResponse({"user":ser.data, "token":token.key}, status=status.HTTP_201_CREATED)
+#         if user is not None:
+#             if user.is_active:
+#                 login(request, user)
+#                 token, created = Token.objects.get_or_create(user=user)
 
-            return JsonResponse({"error":"disabled account"}, status=status.HTTP_404_NOT_FOUND)
-            #Return a 'disabled account' error message
-        else:
-            return JsonResponse({"error":"invalid login"}, status=status.HTTP_400_BAD_REQUEST)
+#                 ser = UserSerializers(user)
+
+#                 return JsonResponse({"user":ser.data, "token":token.key}, status=status.HTTP_201_CREATED)
+
+#             return JsonResponse({"error":"disabled account"}, status=status.HTTP_404_NOT_FOUND)
+#             #Return a 'disabled account' error message
+#         else:
+#             return JsonResponse({"error":"invalid login"}, status=status.HTTP_400_BAD_REQUEST)

@@ -133,11 +133,14 @@ DATABASE_URL = os.environ.get('DATABASE_URL')
 db_from_env = dj_database_url.config(default=DATABASE_URL, conn_max_age=500, ssl_require=True)
 DATABASES['default'].update(db_from_env)
 
+
 REST_FRAMEWORK = {
     # 'DEFAULT_PAGINATION_CLASS':
     # 'rest_framework.pagination.PageNumberPagination',
     # 'PAGE_SIZE': 100,
-    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'  # <-- Here
+    'DEFAULT_SCHEMA_CLASS': ['rest_framework.schemas.coreapi.AutoSchema',
+            'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ] # <-- Here
 }
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators

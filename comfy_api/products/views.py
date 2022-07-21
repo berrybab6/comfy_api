@@ -10,6 +10,9 @@ from django.http import JsonResponse
 
 from .serializers import ColorSizeSerializer, ComfyProductsAllSerializer, ComfyProductsSerializer, ComfyProductsTypeSerializer, ComfySaleSerializer, DimensionSerializer, FavoriteSerializer, FavoriteStatusSerializer, ImageCategorySerializer, ProductImagesSerializer, ShippingInfoSerializer
 # Create your views here.
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 
 class ComfyProductView(viewsets.ModelViewSet):
@@ -22,7 +25,7 @@ class ComfyProductView(viewsets.ModelViewSet):
 class ProductsByTypeView(generics.GenericAPIView):
     serializer_class = ComfyProductsTypeSerializer
     queryset = ComfyProducts.objects.all()
-    permission_classes = [permissions.AllowAny, ]
+    permission_classes = [IsAuthenticated, ]
 
     def get(self, request, category = None, itemType = None):
         try:
@@ -43,7 +46,7 @@ class ProductsByTypeView(generics.GenericAPIView):
 class FeaturedProductsView(generics.GenericAPIView):
     serializer_class = ComfyProductsTypeSerializer
     queryset = ComfyProducts.objects.all()
-    permission_classes = [permissions.AllowAny, ]
+    permission_classes = [IsAuthenticated, ]
 
     def get(self, request):
         prod = ComfyProducts.objects.filter(featured =True)
@@ -59,7 +62,7 @@ class FeaturedProductsView(generics.GenericAPIView):
 class NewestProductsView(generics.GenericAPIView):
     serializer_class = ComfyProductsTypeSerializer
     queryset = ComfyProducts.objects.all()
-    permission_classes = [permissions.AllowAny, ]
+    permission_classes = [IsAuthenticated, ]
 
     def get(self, request):
         zare = datetime.today()
@@ -80,7 +83,7 @@ class NewestProductsView(generics.GenericAPIView):
 class ImageCategoryProductsView(generics.GenericAPIView):
     serializer_class = ImageCategorySerializer
     queryset = ComfyProducts.objects.all()
-    permission_classes = [permissions.AllowAny, ]
+    permission_classes = [IsAuthenticated, ]
 
     def get(self, request,category=None):
 
@@ -95,7 +98,7 @@ class ImageCategoryProductsView(generics.GenericAPIView):
 class CategoryProductsView(generics.GenericAPIView):
     serializer_class = ComfyProductsTypeSerializer
     queryset = ComfyProducts.objects.all()
-    permission_classes = [permissions.AllowAny, ]
+    permission_classes = [IsAuthenticated, ]
 
     def get(self, request,category=None):
         # featured = ComfyProducts.objects.filter(prod_category=category)
@@ -153,7 +156,7 @@ class ComfyProductsDetailView(generics.GenericAPIView):
     
 
     serializer_class = [ComfyProductsSerializer, ProductImagesSerializer, DimensionSerializer,ColorSizeSerializer]
-    permission_classes = [permissions.AllowAny, ]
+    permission_classes = [IsAuthenticated, ]
 
     def get(self, request,pk=None):
         # try:
@@ -184,7 +187,7 @@ from accounts.models import User
 class FavoriteProductsView(generics.GenericAPIView):
     serializer_classes = [FavoriteProduct, ComfyProductsSerializer, FavoriteStatusSerializer]
     queryset = [FavoriteProduct.objects.all(),ComfyProducts.objects.all()]
-    permission_classes = [permissions.AllowAny, ]
+    permission_classes = [IsAuthenticated, ]
 
     def get(self, request,user_id=None):
         # user= User.objects.get(id=user_id)

@@ -6,7 +6,7 @@ from django.contrib.auth.models import (AbstractUser, BaseUserManager)
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings
-from rest_framework.authtoken.models import Token
+# from rest_framework.authtoken.models import Token
 # Create your models here.
 
 class UserManager(BaseUserManager):
@@ -59,8 +59,8 @@ class User(AbstractUser):
     
 
     # comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name="user", default=None, null=True, blank=True)
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email']
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
 
     objects = UserManager()
     def __str__(self):
@@ -84,7 +84,7 @@ class User(AbstractUser):
     def is_admin(self):
         return self.admin
     
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def create_auth_token(sender, instance=None, created=False, **kwargs):
-    if created:
-        Token.objects.create(user=instance)
+# @receiver(post_save, sender=settings.AUTH_USER_MODEL)
+# def create_auth_token(sender, instance=None, created=False, **kwargs):
+#     if created:
+#         Token.objects.create(user=instance)
