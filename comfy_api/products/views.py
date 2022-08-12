@@ -152,10 +152,8 @@ class ItemSizeListView(viewsets.ModelViewSet):
 
 
 class ComfyProductsDetailView(generics.GenericAPIView):
-    queryset = [ComfyProducts.objects.all(),Dimension.objects.all(),ProductImages.objects.all(), ItemSizeColor.objects.all()]
-    
-
-    serializer_class = [ComfyProductsSerializer, ProductImagesSerializer, DimensionSerializer,ColorSizeSerializer]
+    queryset = [ComfyProducts.objects.all(),Dimension.objects.all(),ProductImages.objects.all(), ItemSizeColor.objects.all(),]
+    serializer_class = [ComfyProductsSerializer, ProductImagesSerializer, DimensionSerializer,ColorSizeSerializer,]
     permission_classes = [IsAuthenticated, ]
 
     def get(self, request,pk=None):
