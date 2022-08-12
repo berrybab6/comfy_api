@@ -138,9 +138,18 @@ REST_FRAMEWORK = {
     # 'DEFAULT_PAGINATION_CLASS':
     # 'rest_framework.pagination.PageNumberPagination',
     # 'PAGE_SIZE': 100,
-    'DEFAULT_SCHEMA_CLASS': ['rest_framework.schemas.coreapi.AutoSchema',
-            'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ] # <-- Here
+    # 'rest_framework.schemas.coreapi.AutoSchema',
+     'DEFAULT_AUTHENTICATION_CLASSES': (
+        # 'fixmycity_api.jwt.JwtAuthentication',
+       
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+        
+        
+        #  'rest_framework.permissions.IsAuthenticated', # make all endpoints private
+    ),
 }
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
