@@ -29,22 +29,62 @@ class ComfyProducts(models.Model):
     KIDS = 3
 
     CATEGORY_CHOICES = ((WOMENS, 'womens'), (MENS, 'mens'), (KIDS, 'kids'))
-    T_SHIRT = 1
-    TROUSER = 2
-    SKIRT = 3
-    DRESS = 4
-    ACCESORY = 5
-    TOYS = 6
-    BAG = 7
+   
+        ##########for Women
+    DRESS = "dress"
+    JUMPSUIT = "jumpsuit"
+    TWO_PIECE_CLOTHES = "two_piece_clothes"
+    WOMEN_SUIT = "women_suit"
+    PAJAMAS = "pajamas"
+    WOMEN_BLAZER = "women_blazer"
+    TOP = "top"
+    SKIRT = "skirt"
+    ACCESORY = "accesory"
+    BAG = "bag"
+    WOMEN_TROUSER= "women_trouser"
+    ###### for Boys
+    T_SHIRT = "t_shirt"
+    TROUSER = "trouser"
+    WATCH = "watch"
+    
+    ###For Baby
+    TOYS = "toys"
+    KIDS_BAG = "kids_bag"
+    # T_SHIRT = 1
+    # TROUSER = 2
+    # SKIRT = 3
+    # DRESS = 4
+    # ACCESORY = 5
+    # TOYS = 6
+    # BAG = 7
 
-    ITEM_TYPE = ((T_SHIRT,'t_shirts'), (TROUSER, 'trouser'), (SKIRT, 'skirt'), (DRESS, 'dress'), (ACCESORY, 'accesory'), (TOYS,'toys'), (BAG,'bag'))       
-    item_type = models.PositiveSmallIntegerField(
-        choices=ITEM_TYPE, null=True)
+    ITEM_TYPE = (
+    ##########for Women
+    (DRESS, "dress"),
+    (JUMPSUIT , "jumpsuit"),
+    (TWO_PIECE_CLOTHES ,"two_piece_clothes"),
+    (WOMEN_SUIT , "women_suit"),
+    (PAJAMAS , "pajamas"),
+    (WOMEN_BLAZER , "women_blazer"),
+    (TOP , "top"),
+    (SKIRT ,"skirt"),
+    (ACCESORY , "accesory"),
+    (BAG ,"bag"),
+    (WOMEN_TROUSER , "women_trouser"),
+    ###### for Boys
+    (T_SHIRT , "t_shirt"),
+    (TROUSER , "trouser"),
+    (WATCH , "watch"),
+     ###For Baby
+    (TOYS , "toys"),
+    (KIDS_BAG , "kids_bag"),
+         )       
+    item_type = models.CharField(
+        choices=ITEM_TYPE, max_length=50,null=True)
     prod_category = models.PositiveSmallIntegerField(
         choices=CATEGORY_CHOICES, null=True)
     brand = models.CharField(max_length=100,null=True, blank=True)
 
-    # sale_price = models.DecimalField(max_digits=5, decimal_places=3,null=True)
     
 
     def __str__(self):
