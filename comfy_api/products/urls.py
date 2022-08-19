@@ -24,7 +24,7 @@ urlpatterns = [
     path("image_category/<int:category>",views.ImageCategoryProductsView.as_view(), name="Image Category"),
     path("featured/", views.FeaturedProductsView.as_view(), name="Featured Products"),
     path("newest/", views.NewestProductsView.as_view(), name="Newest Products"),
-    path("<int:category>/<int:itemType>", views.ProductsByTypeView.as_view(), name=" Products by Type"),
+    path("<int:category>/<str:itemType>", views.ProductsByTypeView.as_view(), name=" Products by Type"),
     path("favorite/", views.FavoriteProductsView.as_view(), name="Favorite Products"),
     path("product_by_category/<int:category>", views.CategoryProductsView.as_view(), name="Products By Category"),
 
