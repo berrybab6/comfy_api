@@ -50,14 +50,7 @@ class ComfyProducts(models.Model):
     ###For Baby
     TOYS = "toys"
     KIDS_BAG = "kids_bag"
-    # T_SHIRT = 1
-    # TROUSER = 2
-    # SKIRT = 3
-    # DRESS = 4
-    # ACCESORY = 5
-    # TOYS = 6
-    # BAG = 7
-
+ 
     ITEM_TYPE = (
     ##########for Women
     (DRESS, "dress"),
