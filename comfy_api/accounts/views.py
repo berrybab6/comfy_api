@@ -78,8 +78,9 @@ class UserCreateView(generics.GenericAPIView):
            
             ser = UserSerializers(user)
             # return JsonResponse(ser.data, safe=False)
+            token = Utils.encode_token(user)
 
-            return JsonResponse(ser.data,safe=False, status=status.HTTP_200_OK)
+            return JsonResponse({"user":ser.data, "token":token}, status=status.HTTP_200_OK)
        
         else:
             return JsonResponse({"error":"Empty_field"})
