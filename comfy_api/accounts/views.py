@@ -12,7 +12,7 @@ from rest_framework.views import APIView
 
 from django.contrib.auth.hashers import make_password,check_password
 
-from .serializers import LoginSerializer, UserSerializers
+from .serializers import LoginSerializer, UserSerializers, RegisterUserSerializers
 # from rest_framework.authtoken.views import ObtainAuthToken
 
 # , authenticate
@@ -30,7 +30,7 @@ from rest_framework.authtoken.models import Token
 
 class UserDetailView(generics.GenericAPIView):
     queryset = User.objects.all()
-    serializer_class = UserSerializers
+    serializer_classes = [UserSerializers,RegisterUserSerializers]
     permission_classes = [permissions.AllowAny, ]
 
     def get(self, request,pk=None):
@@ -46,7 +46,7 @@ class UserDetailView(generics.GenericAPIView):
             return JsonResponse({"message":"No user Found "}, status=status.HTTP_404_NOT_FOUND)
 
 class UserCreateView(generics.GenericAPIView):
-    serializer_class = UserSerializers
+    serializer_class = RegisterUserSerializers
     queryset = User.objects.all()
     permission_classes = [permissions.AllowAny, ]
 
@@ -76,7 +76,7 @@ class UserCreateView(generics.GenericAPIView):
                                             full_name=full_name,
                                             phone_number = phone_number)
            
-            ser = UserSerializers(user)
+            ser = RegisterUserSerializers(user)
             # return JsonResponse(ser.data, safe=False)
             token = Utils.encode_token(user)
 
