@@ -60,8 +60,8 @@ class ComfyProducts(models.Model):
     (TWO_PIECES ,"two_pieces"),
     (BLAZER , "blazer"),
     (TOP , "top"),
-    (SKIRT, "skirt")
-    (HUMAN_HAIR ,"human hair")
+    (SKIRT, "skirt"),
+    (HUMAN_HAIR ,"human hair"),
 
 
      ###### Both Women And Men
@@ -71,7 +71,7 @@ class ComfyProducts(models.Model):
 
      ### all Category
     (BAG ,"bag"),
-    (SHORTS,"shorts")
+    (SHORTS,"shorts"),
     (T_SHIRT , "t_shirt"),
     (TROUSER , "trouser"),
 
