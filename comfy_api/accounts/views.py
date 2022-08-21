@@ -80,10 +80,10 @@ class UserCreateView(generics.GenericAPIView):
             # return JsonResponse(ser.data, safe=False)
             token = Utils.encode_token(user)
 
-            return JsonResponse({"user":ser.data, "token":token}, status=status.HTTP_200_OK)
+            return JsonResponse({"message":"User Created Succesfully", "token":token}, status=status.HTTP_201_CREATED)
        
         else:
-            return JsonResponse({"error":"Empty_field"})
+            return JsonResponse({"error":"Empty_field"},status=status.HTTP_400_BAD_REQUEST)
     def get(self, request):
         if User.objects.all().exists():
             user = User.objects.all()
@@ -91,7 +91,7 @@ class UserCreateView(generics.GenericAPIView):
             serialize = UserSerializers(user,many=True)
             return JsonResponse(serialize.data,safe=False, status=status.HTTP_200_OK)
         else:
-            return JsonResponse({"message":"No user Found with this id"}, status=status.HTTP_404_NOT_FOUND)
+            return JsonResponse({"message":"No user Found"}, status=status.HTTP_404_NOT_FOUND)
 
 class LoginUserView(APIView):
     permission_classes = [AllowAny, ]

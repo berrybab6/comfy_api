@@ -18,7 +18,8 @@ from rest_framework.permissions import IsAuthenticated
 class ComfyProductView(viewsets.ModelViewSet):
     serializer_class = ComfyProductsAllSerializer
     queryset = ComfyProducts.objects.all()
-    
+    permission_classes = [IsAuthenticated, ]
+
     def get_queryset(self):
         return super().get_queryset()
 

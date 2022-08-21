@@ -30,47 +30,53 @@ class ComfyProducts(models.Model):
 
     CATEGORY_CHOICES = ((WOMENS, 'womens'), (MENS, 'mens'), (KIDS, 'kids'))
    
-        ##########for Women
+        ##########for Women ONly
     DRESS = "dress"
     JUMPSUIT = "jumpsuit"
-    TWO_PIECE_CLOTHES = "two_piece_clothes"
-    WOMEN_SUIT = "women_suit"
-    PAJAMAS = "pajamas"
-    WOMEN_BLAZER = "women_blazer"
+    TWO_PIECES = "two_pieces"
+    BLAZER = "blazer"
     TOP = "top"
     SKIRT = "skirt"
+    HUMAN_HAIR = "human hair"
+
+   ###### Both Women And Men
+    SUIT = "suit"
+    PAJAMAS = "pajamas"  
     ACCESORY = "accesory"
+    ### all Category
     BAG = "bag"
-    WOMEN_TROUSER= "women_trouser"
-    ###### for Boys
+    SHORTS = "shorts"
     T_SHIRT = "t_shirt"
     TROUSER = "trouser"
-    WATCH = "watch"
-    
+       
     ###For Baby
     TOYS = "toys"
-    KIDS_BAG = "kids_bag"
  
     ITEM_TYPE = (
     ##########for Women
+         ##########for Women ONly
     (DRESS, "dress"),
     (JUMPSUIT , "jumpsuit"),
-    (TWO_PIECE_CLOTHES ,"two_piece_clothes"),
-    (WOMEN_SUIT , "women_suit"),
-    (PAJAMAS , "pajamas"),
-    (WOMEN_BLAZER , "women_blazer"),
+    (TWO_PIECES ,"two_pieces"),
+    (BLAZER , "blazer"),
     (TOP , "top"),
-    (SKIRT ,"skirt"),
+    (SKIRT, "skirt")
+    (HUMAN_HAIR ,"human hair")
+
+
+     ###### Both Women And Men
+    (SUIT,"suit"),
+    (PAJAMAS , "pajamas"),
     (ACCESORY , "accesory"),
+
+     ### all Category
     (BAG ,"bag"),
-    (WOMEN_TROUSER , "women_trouser"),
-    ###### for Boys
+    (SHORTS,"shorts")
     (T_SHIRT , "t_shirt"),
     (TROUSER , "trouser"),
-    (WATCH , "watch"),
+
      ###For Baby
     (TOYS , "toys"),
-    (KIDS_BAG , "kids_bag"),
          )       
     item_type = models.CharField(
         choices=ITEM_TYPE, max_length=50,null=True)
