@@ -33,12 +33,12 @@ class ProductsByTypeView(generics.GenericAPIView):
             if ComfyProducts.objects.filter(prod_category=category, item_type = itemType).exists():
                 prod = ComfyProducts.objects.filter(prod_category=category, item_type = itemType)
                 ser = ComfyProductsTypeSerializer(prod, many=True)
-                return JsonResponse({"products":ser.data})
+                return JsonResponse({"products":ser.data}, status = 200)
             else:
                 return JsonResponse({"error":"No Products Found","products":[]},status=204)
         except:
             print("Helllloooo")
-            return JsonResponse({"error":"No Product"})
+            return JsonResponse({"error":"Unable to fetch Products"}, status= 500)
 
     def get_queryset(self):
         return super().get_queryset()
@@ -53,9 +53,9 @@ class FeaturedProductsView(generics.GenericAPIView):
         prod = ComfyProducts.objects.filter(featured =True)
         if prod:
             ser = ComfyProductsTypeSerializer(prod, many=True)
-            return JsonResponse({"products":ser.data})
+            return JsonResponse({"products":ser.data}, status= 200)
         else:
-            JsonResponse({"error":"No Products Found"})
+            JsonResponse({"error":"No Products Found"}, status=400)
     def get_queryset(self):
         return super().get_queryset()
 
