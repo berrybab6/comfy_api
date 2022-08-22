@@ -225,7 +225,7 @@ class FavoriteProductsView(generics.GenericAPIView):
                             # print("so here right")
                             ser = FavoriteStatusSerializer(fav)
 
-                            return JsonResponse({"products 1":ser.data})
+                            return JsonResponse({"products":ser.data})
                         else:
                             fav = FavoriteProduct.objects.create(user_id=user, wished_item=prod)
                             fav.save()
