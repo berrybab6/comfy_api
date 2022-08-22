@@ -232,7 +232,7 @@ class FavoriteProductsView(generics.GenericAPIView):
                             fav = FavoriteProduct.objects.create(user_id=user, wished_item=prod)
                             fav.save()
                             ser = FavoriteStatusSerializer(fav)
-                            return JsonResponse({"products ":ser.data})
+                            return JsonResponse({"products":ser.data})
                     else:
                         return JsonResponse({"error":"No Product Found!!!"},status=204)
                 return JsonResponse({"error":"Empty Field!!!"},status=400)
