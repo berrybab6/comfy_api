@@ -213,27 +213,27 @@ class FavoriteProductsView(generics.GenericAPIView):
             user = self.request.user
             if user:
                 print("LOLLLLL")
-                prod_id=request.data["prod_id"]
+                prod_id=request.data.get("prod_id","")
+                if prod_id !="":
+                    if ComfyProducts.objects.filter(id=prod_id).exists():
+                        # user= User.objects.get(id=user_id)
+                        prod = ComfyProducts.objects.get(id=prod_id)
+                        if(FavoriteProduct.objects.filter(user_id=user, wished_item=prod).exists()):
+                            fav = FavoriteProduct.objects.get(user_id=user, wished_item=prod)
+                            fav.status = not fav.status
+                            fav.save()
+                            # print("so here right")
+                            ser = FavoriteStatusSerializer(fav)
 
-                if ComfyProducts.objects.filter(id=prod_id).exists():
-                    # user= User.objects.get(id=user_id)
-                    prod = ComfyProducts.objects.get(id=prod_id)
-                    if(FavoriteProduct.objects.filter(user_id=user, wished_item=prod).exists()):
-                        fav = FavoriteProduct.objects.get(user_id=user, wished_item=prod)
-                        fav.status = not fav.status
-                        fav.save()
-                        # print("so here right")
-                        ser = FavoriteStatusSerializer(fav)
-
-                        return JsonResponse({"products 1":ser.data})
+                            return JsonResponse({"products 1":ser.data})
+                        else:
+                            fav = FavoriteProduct.objects.create(user_id=user, wished_item=prod)
+                            fav.save()
+                            ser = FavoriteStatusSerializer(fav)
+                            return JsonResponse({"products ":ser.data})
                     else:
-                        fav = FavoriteProduct.objects.create(user_id=user, wished_item=prod)
-                        fav.save()
-                        ser = FavoriteStatusSerializer(fav)
-                        return JsonResponse({"products ":ser.data})
-                else:
-                    return JsonResponse({"error":"No Product Found!!!"},status=204)
-
+                        return JsonResponse({"error":"No Product Found!!!"},status=204)
+                return JsonResponse({"error":"Empty Field!!!"},status=400)
             else:
                 return JsonResponse({"error":"No User item Found!!!"}, status=204)
 
