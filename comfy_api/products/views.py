@@ -190,11 +190,13 @@ class FavoriteProductsView(generics.GenericAPIView):
 
     def get(self, request):
         # user= User.objects.get(id=user_id)
+        user = self.request.user
+
         try:
-            user = self.request.user
+
             if user:
                 # user= User.objects.get(id=user_id)
-
+                print("USR",user)
                 favs = FavoriteProduct.objects.filter(user_id=user , status=True).order_by('-added_date')
 
                 if favs:
