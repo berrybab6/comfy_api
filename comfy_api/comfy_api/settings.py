@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     #  'django.contrib.auth',
     'django.contrib.messages',
     'django.contrib.sites',
-
+    'cart',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
